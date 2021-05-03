@@ -1,10 +1,6 @@
-package;
+package; #if desktop import Discord.DiscordClient;
 
-#if desktop
-import Discord.DiscordClient;
-import sys.thread.Thread;
-#end
-import flixel.FlxG;
+import sys.thread.Thread; #end import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
@@ -51,7 +47,10 @@ class TitleState extends MusicBeatState
 		#if polymod
 		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
 		#end
-
+		@:privateAccess
+		{
+			trace("Loaded " + openfl.Assets.getLibrary("default").assetsLoaded + " assets (DEFAULT)");
+		}
 		PlayerSettings.init();
 
 		curWacky = FlxG.random.getObject(getIntroTextShit());
@@ -224,6 +223,8 @@ class TitleState extends MusicBeatState
 	function getIntroTextShit():Array<Array<String>>
 	{
 		var fullText:String = Assets.getText(Paths.txt('introText'));
+		if (Date.now().getDay() == 5)
+			fullText = Assets.getText(Paths.txt('funkyText'));
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
@@ -281,7 +282,10 @@ class TitleState extends MusicBeatState
 
 			// If it's Friday according to da clock
 			if (Date.now().getDay() == 5)
+			{
+				trace('[ProjectFNF] GUYS ITS FRIDAY HELL YEAH');
 				NGio.unlockMedal(61034);
+			}
 			#end
 
 			titleText.animation.play('press');

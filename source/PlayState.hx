@@ -76,6 +76,9 @@ class PlayState extends MusicBeatState
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
+
+	var fullCombo:Bool = true; // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 
@@ -84,6 +87,7 @@ class PlayState extends MusicBeatState
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
+	var rank:Float;
 
 	private var dad:Character;
 	private var gf:Character;
@@ -145,6 +149,7 @@ class PlayState extends MusicBeatState
 
 	var talking:Bool = true;
 	var songScore:Int = 0;
+	var songMisses:Int = 0;
 	var scoreTxt:FlxText;
 	var timerTxt:FlxText;
 
@@ -838,9 +843,11 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
-		scoreTxt.scrollFactor.set();
+		scoreTxt = new FlxText(0, healthBarBG.y + 50, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		scoreTxt.borderColor = FlxColor.BLACK;
+		scoreTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK, 1, 1);
+		scoreTxt.screenCenter(X);
 		add(scoreTxt);
 		add(timerTxt);
 
@@ -1546,7 +1553,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore;
+		scoreTxt.text = "Misses:" + songMisses + " | Score:" + songScore + " "; // the last part is just so the outline doesnt clip
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1751,7 +1758,7 @@ class PlayState extends MusicBeatState
 		if (controls.RESET)
 		{
 			health = 0;
-			trace("RESET = True");
+			trace("[ProjectFNF] Reset player");
 		}
 
 		// CHEAT = brandon's a pussy
@@ -1771,7 +1778,9 @@ class PlayState extends MusicBeatState
 
 			vocals.stop();
 			FlxG.sound.music.stop();
-
+			FlxG.camera.shake(0.08, 0.1, null, true, XY);
+			if (SONG.song.toLowerCase() == 'tutorial')
+				trace('[ProjectFNF] how tf did you die on tutorial');
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 
 			// FlxG.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
@@ -1892,6 +1901,39 @@ class PlayState extends MusicBeatState
 					{
 						health -= 0.0475;
 						vocals.volume = 0;
+						FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+						// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
+						// FlxG.log.add('played imss note');
+
+						boyfriend.stunned = true;
+
+						// get stunned for 5 seconds
+						new FlxTimer().start(5 / 60, function(tmr:FlxTimer)
+						{
+							boyfriend.stunned = false;
+						});
+						songMisses += 1;
+						fullCombo = false;
+						trace('miss');
+						switch (daNote.noteData)
+						{
+							case 0:
+								boyfriend.playAnim('singLEFTmiss', true);
+								if (Config.MISSFX = true)
+									FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
+							case 1:
+								boyfriend.playAnim('singDOWNmiss', true);
+								if (Config.MISSFX = true)
+									FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
+							case 2:
+								boyfriend.playAnim('singUPmiss', true);
+								if (Config.MISSFX = true)
+									FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
+							case 3:
+								boyfriend.playAnim('singRIGHTmiss', true);
+								if (Config.MISSFX = true)
+									FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
+						}
 					}
 
 					daNote.active = false;
@@ -1990,7 +2032,7 @@ class PlayState extends MusicBeatState
 				if (storyDifficulty == 2)
 					difficulty = '-hard';
 
-				trace('LOADING NEXT SONG');
+				trace('[ProjectFNF] Loading song ' + SONG.song.toLowerCase());
 				trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);
 
 				if (SONG.song.toLowerCase() == 'eggnog')
@@ -2011,7 +2053,6 @@ class PlayState extends MusicBeatState
 					add(whiteShit);
 					camHUD.visible = false;
 
-					trace('PEE YOURSELF');
 					FlxG.sound.play(Paths.sound('thunder_2'));
 				}
 
@@ -2019,7 +2060,6 @@ class PlayState extends MusicBeatState
 				{
 					FlxTransitionableState.skipNextTransIn = false;
 					FlxTransitionableState.skipNextTransOut = false;
-					trace('yes');
 				}
 				else
 				{
@@ -2036,7 +2076,7 @@ class PlayState extends MusicBeatState
 		}
 		else
 		{
-			trace('WENT BACK TO FREEPLAY??');
+			trace('[ProjectFNF] Returned to Freeplay');
 			FlxG.switchState(new FreeplayState());
 		}
 	}
@@ -2103,7 +2143,6 @@ class PlayState extends MusicBeatState
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x -= FlxG.random.int(0, 10);
-
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
@@ -2416,16 +2455,28 @@ class PlayState extends MusicBeatState
 				boyfriend.stunned = false;
 			});
 
+			songMisses += 1;
+			fullCombo = false;
+			trace('miss');
+
 			switch (direction)
 			{
 				case 0:
 					boyfriend.playAnim('singLEFTmiss', true);
+					if (Config.MISSFX = true)
+						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 				case 1:
 					boyfriend.playAnim('singDOWNmiss', true);
+					if (Config.MISSFX = true)
+						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
 				case 2:
 					boyfriend.playAnim('singUPmiss', true);
+					if (Config.MISSFX = true)
+						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, Y);
 				case 3:
 					boyfriend.playAnim('singRIGHTmiss', true);
+					if (Config.MISSFX = true)
+						FlxG.camera.shake(Config.MISSINTENSITY, 0.1, null, true, X);
 			}
 		}
 	}
@@ -2558,6 +2609,7 @@ class PlayState extends MusicBeatState
 		{
 			startedMoving = true;
 			gf.playAnim('hairBlow');
+			camera.shake(0.002, 0.1, null, true, X);
 		}
 
 		if (startedMoving)
@@ -2594,6 +2646,7 @@ class PlayState extends MusicBeatState
 	{
 		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 		halloweenBG.animation.play('lightning');
+		camera.shake(0.003, 2.3, null, true, Y);
 
 		lightningStrikeBeat = curBeat;
 		lightningOffset = FlxG.random.int(8, 24);
