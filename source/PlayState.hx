@@ -76,9 +76,6 @@ class PlayState extends MusicBeatState
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
-
-	var fullCombo:Bool = true; // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 
@@ -87,7 +84,6 @@ class PlayState extends MusicBeatState
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
-	var rank:Float;
 
 	private var dad:Character;
 	private var gf:Character;
@@ -151,6 +147,7 @@ class PlayState extends MusicBeatState
 	var songScore:Int = 0;
 	var songMisses:Int = 0;
 	var scoreTxt:FlxText;
+	var missesTxt:FlxText;
 	var timerTxt:FlxText;
 
 	public static var campaignScore:Int = 0;
@@ -829,7 +826,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, FlxG.height * 0.88).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -843,11 +840,15 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 50, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER);
+		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 60, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		scoreTxt.borderColor = FlxColor.BLACK;
 		scoreTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK, 1, 1);
-		scoreTxt.screenCenter(X);
+		missesTxt = new FlxText(healthBarBG.x + healthBarBG.width - 475, healthBarBG.y + 60, 0, "", 20);
+		missesTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT);
+		missesTxt.borderColor = FlxColor.BLACK;
+		missesTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE_FAST, FlxColor.BLACK, 1, 1);
+		add(missesTxt);
 		add(scoreTxt);
 		add(timerTxt);
 
@@ -866,6 +867,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		missesTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1553,7 +1555,8 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Misses:" + songMisses + " | Score:" + songScore + " "; // the last part is just so the outline doesnt clip
+		scoreTxt.text = "Score:" + songScore + " "; // the last part is just so the outline doesnt clip
+		missesTxt.text = "Misses:" + songMisses;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1913,8 +1916,6 @@ class PlayState extends MusicBeatState
 							boyfriend.stunned = false;
 						});
 						songMisses += 1;
-						fullCombo = false;
-						trace('miss');
 						switch (daNote.noteData)
 						{
 							case 0:
@@ -2143,6 +2144,7 @@ class PlayState extends MusicBeatState
 		rating.acceleration.y = 550;
 		rating.velocity.y -= FlxG.random.int(140, 175);
 		rating.velocity.x -= FlxG.random.int(0, 10);
+
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
@@ -2455,10 +2457,6 @@ class PlayState extends MusicBeatState
 				boyfriend.stunned = false;
 			});
 
-			songMisses += 1;
-			fullCombo = false;
-			trace('miss');
-
 			switch (direction)
 			{
 				case 0:
@@ -2732,6 +2730,14 @@ class PlayState extends MusicBeatState
 			boyfriend.playAnim('hey', true);
 			gf.playAnim('cheer', true);
 		}
+		if (SONG.song.toLowerCase() == "cocoa")
+			switch (curBeat)
+			{
+				case 31 | 47 | 63 | 143:
+					gf.playAnim('cheer', true);
+				case 180:
+					boyfriend.playAnim('hey', true);
+			}
 		if (curBeat == 47 && curSong == 'Spookeez')
 		{
 			gf.playAnim('cheer', true);
