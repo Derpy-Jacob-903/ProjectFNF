@@ -446,34 +446,6 @@ class Character extends FlxSprite
 				updateHitbox();
 
 				antialiasing = false;
-			case 'playablesenpai':
-				frames = Paths.getSparrowAtlas('playablesenpai');
-				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
-				animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
-				animation.addByPrefix('singLEFT', 'SENPAI LEFT NOTE', 24, false);
-				animation.addByPrefix('singRIGHT', 'SENPAI RIGHT NOTE', 24, false);
-				animation.addByPrefix('singDOWN', 'SENPAI DOWN NOTE', 24, false);
-				animation.addByPrefix('singUPmiss', 'miss Senpai UP NOTE', 24, false);
-				animation.addByPrefix('singLEFTmiss', 'miss Senpai LEFT NOTE', 24, false);
-				animation.addByPrefix('singRIGHTmiss', 'miss Senpai RIGHT NOTE', 24, false);
-				animation.addByPrefix('singDOWNmiss', 'miss Senpai DOWN NOTE', 24, false);
-	
-				addOffset('idle', 50, 200);
-				addOffset("singUP", 55, 237);
-				addOffset("singRIGHT", 50, 200);
-				addOffset("singLEFT", 90, 200);
-				addOffset("singDOWN", 64, 200);
-				addOffset("singUPmiss", 55, 237);
-				addOffset("singRIGHTmiss", 50, 200);
-				addOffset("singLEFTmiss", 90, 200);
-				addOffset("singDOWNmiss", 64, 200);
-	
-				setGraphicSize(Std.int(width * 6));
-				updateHitbox();
-	
-				playAnim('idle');
-	
-				antialiasing = false;
 				
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('weeb/senpai');
