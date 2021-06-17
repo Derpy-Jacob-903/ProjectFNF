@@ -186,7 +186,7 @@ class PlayState extends MusicBeatState
 			strumming2[strum] = true;
 		}
 
-		var bps:Float = bpm / 60;
+		var bps:Float = Conductor.bpm / 60;
 		var spb:Float = 1 / bps;
 
 		if (!note.isSustainNote)
