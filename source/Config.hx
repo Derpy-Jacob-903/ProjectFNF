@@ -20,7 +20,7 @@ class Config extends MusicBeatState
 	 * 
 	 * Default = **false**
 	 */
-	 public static var DOWNSCROLL:Bool = false;
+	 public static var DOWNSCROLL:Bool = true;
 
 	/**
 	 * Use the ProjectFNF logo or the Friday Night Funkin logo??
@@ -48,7 +48,7 @@ class Config extends MusicBeatState
 	 * 
 	 * Default = **false**
 	 */
-	public static var DEBUGMODE:Bool = false;
+	public static var DEBUGMODE:Bool = true;
 
 	/**
 	 * Shakes the camera when you miss a note. Shakes on the Axis you missed the note of. (Up/Down will shake the camera Up and Down)
