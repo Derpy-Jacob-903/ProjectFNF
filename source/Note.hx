@@ -53,21 +53,20 @@ class Note extends FlxSkewedSprite
 		var daStage:String = PlayState.curStage;
 
 	//	trace("Type == " + type);
-		if (type == 1) { //????
-			frames = Paths.getSparrowAtlas('notes/ALL_deathnotes');
-			animation.addByPrefix('greenScroll', 'Green Arrow', 30, false);
-			animation.addByPrefix('redScroll', 'Red Arrow', 30, false);
-			animation.addByPrefix('blueScroll', 'Blue Arrow', 30, false);
-			animation.addByPrefix('purpleScroll', 'Purple Arrow', 30, false);
-			setGraphicSize(Std.int(width * 0.6));
-			updateHitbox();
-			antialiasing = true;
-			//animation.play('redScroll', true);
-		} else {
-			if (!FlxG.save.data.squarenotes) {
+		if (!FlxG.save.data.squarenotes) {
 			switch (daStage)
 			{
 				case 'school' | 'schoolEvil':
+					if (type == 1) { //????
+					frames = Paths.getSparrowAtlas('weeb/pixelUI/notes/ALL-deathnotes-pixel');
+					animation.addByPrefix('greenScroll', 'Green Arrow', 30, false);
+					animation.addByPrefix('redScroll', 'Red Arrow', 30, false);
+					animation.addByPrefix('blueScroll', 'Blue Arrow', 30, false);
+					animation.addByPrefix('purpleScroll', 'Purple Arrow', 30, false);
+					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+					updateHitbox();
+					//animation.play('redScroll', true);
+					} else {
 					try {
 						loadGraphic(Paths.image('weeb/pixelUI/notes/' + FlxG.save.data.notetheme + '-pixels'), true, 17, 17);
 					} catch(err) {
@@ -93,11 +92,23 @@ class Note extends FlxSkewedSprite
 						animation.add('redhold', [3]);
 						animation.add('bluehold', [1]);
 					}
+					}
 
 					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 					updateHitbox();
 
 				default:
+					if (type == 1) { //????
+					frames = Paths.getSparrowAtlas('notes/ALL_deathnotes');
+					animation.addByPrefix('greenScroll', 'Green Arrow', 30, false);
+					animation.addByPrefix('redScroll', 'Red Arrow', 30, false);
+					animation.addByPrefix('blueScroll', 'Blue Arrow', 30, false);
+					animation.addByPrefix('purpleScroll', 'Purple Arrow', 30, false);
+					setGraphicSize(Std.int(width * 0.6));
+					updateHitbox();
+					antialiasing = true;
+					//animation.play('redScroll', true);
+					} else {
 					frames = Paths.getSparrowAtlas('notes/' + FlxG.save.data.notetheme + '_assets');
 
 					animation.addByPrefix('greenScroll', 'green0');
@@ -118,6 +129,7 @@ class Note extends FlxSkewedSprite
 					setGraphicSize(Std.int(width * 0.7));
 					updateHitbox();
 					antialiasing = true;
+					}
 			}
 		}
 		}
