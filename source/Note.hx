@@ -133,6 +133,7 @@ class Note extends FlxSkewedSprite
 			}
 		}
 		}
+	}
 		if (FlxG.save.data.squarenotes) {
 			setGraphicSize(Std.int(width * 0.7));
 			if (!isSustainNote) 
