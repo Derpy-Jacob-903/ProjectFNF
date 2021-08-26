@@ -54,8 +54,8 @@ class Note extends FlxSkewedSprite
 
 	//	trace("Type == " + type);
 		if (!FlxG.save.data.squarenotes) {
-			switch (daStage)
-			{
+				switch (daStage)
+				{
 				case 'school' | 'schoolEvil':
 					if (type == 1) { //????
 					frames = Paths.getSparrowAtlas('weeb/pixelUI/notes/ALL-deathnotes-pixel');
@@ -128,10 +128,6 @@ class Note extends FlxSkewedSprite
 					setGraphicSize(Std.int(width * 0.7));
 					updateHitbox();
 					antialiasing = true;
-					}
-					}
-					}
-					}
 					}
 		if (FlxG.save.data.squarenotes) {
 			setGraphicSize(Std.int(width * 0.7));
