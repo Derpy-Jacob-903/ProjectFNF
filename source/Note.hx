@@ -133,28 +133,28 @@ class Note extends FlxSkewedSprite
 					}
 					}
 					}
-		//if (FlxG.save.data.squarenotes) {
-			//setGraphicSize(Std.int(width * 0.7));
-			//if (!isSustainNote) 
-				//switch (noteData)
-				//{
-					//case 0:
-						//x += swagWidth * 0;
-						//makeGraphic(100, 100, 0xFFFFFFFF);
-						//color = FlxColor.PURPLE;
-					//case 1:
-						//x += swagWidth * 1;
-						//makeGraphic(100, 100, 0xFFFFFFFF);
-						//color = FlxColor.BLUE;
-					//case 2:
-						//x += swagWidth * 2;
-						//makeGraphic(100, 100, 0xFFFFFFFF);
-						//color = FlxColor.GREEN;
-					//case 3:
-						//x += swagWidth * 3;
-						//makeGraphic(100, 100, 0xFFFFFFFF);
-						//color = FlxColor.RED;
-				//}
+		if (FlxG.save.data.squarenotes) {
+			setGraphicSize(Std.int(width * 0.7));
+			if (!isSustainNote) 
+				switch (noteData)
+				{
+					case 0:
+						x += swagWidth * 0;
+						makeGraphic(100, 100, 0xFFFFFFFF);
+						color = FlxColor.PURPLE;
+					case 1:
+						x += swagWidth * 1;
+						makeGraphic(100, 100, 0xFFFFFFFF);
+						color = FlxColor.BLUE;
+					case 2:
+						x += swagWidth * 2;
+						makeGraphic(100, 100, 0xFFFFFFFF);
+						color = FlxColor.GREEN;
+					case 3:
+						x += swagWidth * 3;
+						makeGraphic(100, 100, 0xFFFFFFFF);
+						color = FlxColor.RED;
+				}
 
 		/*	switch (noteData)
 			{
