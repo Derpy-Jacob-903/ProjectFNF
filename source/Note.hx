@@ -154,7 +154,7 @@ class Note extends FlxSkewedSprite
 						//x += swagWidth * 3;
 						//makeGraphic(100, 100, 0xFFFFFFFF);
 						//color = FlxColor.RED;
-				}
+				//}
 
 		/*	switch (noteData)
 			{
