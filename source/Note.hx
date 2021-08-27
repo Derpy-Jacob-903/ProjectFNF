@@ -249,7 +249,7 @@ class Note extends FlxSkewedSprite
 	}
 		
 		}
-			override function update(elapsed:Float)
+		override } function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
